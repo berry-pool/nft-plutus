@@ -6,6 +6,7 @@ const config: GatsbyConfig = {
     siteUrl: `https://www.yourdomain.tld`,
   },
   plugins: [`gatsby-plugin-postcss`],
+  pathPrefix: "/nft-plutus",
 };
 
 export default config;

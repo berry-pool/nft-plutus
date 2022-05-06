@@ -1,6 +1,7 @@
 import { Lucid } from "lucid-cardano";
 import * as React from "react";
-import { burn, mint, deploy } from "../cardano/nft";
+const { burn, mint } =
+  typeof window !== "undefined" ? await import("../cardano/nft") : ({} as any);
 
 const IndexPage = () => {
   const [connected, setConnected] = React.useState(false);
@@ -67,7 +68,7 @@ const IndexPage = () => {
           />
           <div className="mt-10 text-sm mb-6 text-center">
             Only SpaceBudz holders are eligible to mint <br />
-            (Max supply 1000)
+            (Max supply 10000)
           </div>
           <button
             onClick={async () => {
@@ -82,7 +83,7 @@ const IndexPage = () => {
                     image: "ipfs://" + mintParams.image,
                   };
               setMintParams((m) => ({ ...m, loading: true }));
-              const txHash = await mint(m).catch((e) => {
+              const txHash = await mint(m).catch((e: any) => {
                 setResult({
                   success: "",
                   error: e?.message || JSON.stringify(e),
@@ -130,12 +131,14 @@ const IndexPage = () => {
           <button
             onClick={async () => {
               setBurnParams((b) => ({ ...b, loading: true }));
-              const txHash = await burn(parseInt(burnParams.id)).catch((e) => {
-                setResult({
-                  success: "",
-                  error: e?.message || JSON.stringify(e),
-                });
-              });
+              const txHash = await burn(parseInt(burnParams.id)).catch(
+                (e: any) => {
+                  setResult({
+                    success: "",
+                    error: e?.message || JSON.stringify(e),
+                  });
+                }
+              );
               if (txHash) {
                 setWaitingConfirmation(true);
                 await Lucid.awaitTx(txHash);
