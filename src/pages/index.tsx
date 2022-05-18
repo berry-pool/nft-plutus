@@ -21,10 +21,16 @@ const IndexPage = () => {
   const [result, setResult] = React.useState({ success: "", error: "" });
   const [waitingConfirmation, setWaitingConfirmation] = React.useState(false);
 
+  const onChange = async () => {
+    await Lucid.selectWallet("nami");
+  };
+
   const init = async () => {
     const connected = await (window as any)?.cardano?.nami?.isEnabled();
     if (connected) {
       await Lucid.selectWallet("nami");
+      const api = await (window as any)?.cardano?.nami?.enable();
+      api.experimental.on("accountChange", onChange);
     }
     setConnected(connected);
   };
